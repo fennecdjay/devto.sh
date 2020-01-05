@@ -1,7 +1,7 @@
 ---
 title: A simple blog tool
 published: true
-tags:github,dev,bash
+tags: github, dev, bash
 ---
 
 # Use bash github actions to (cross-)post to dev.to
