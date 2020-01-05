@@ -1,7 +1,7 @@
 ---
 title: A simple blog tool
 published: false
-tags: [git, github, bash, github actions, dev, gwion, doc]
+tags: [git,github,bash,dev,gwion,documentation]
 ---
 
 # Use bash github actions to (cross-)post to dev.to
