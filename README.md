@@ -2,6 +2,9 @@
 
 Leverage bash and github actions to automate posting to [dev.to](https://dev.to)
 
+![](https://github.com/fennecdjay/devto.sh/workflows/devto/badge.svg)
+
+
 ## Setup
 
 There is just a few steps to complete to get started.
