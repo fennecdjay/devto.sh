@@ -1,6 +1,7 @@
 ---
 title: A banner for devto.sh (note to self: DO NOT DELETE)
 published: false
+cover_image: https://thepracticaldev.s3.amazonaws.com/i/r9i6yw7mvb7lopi7c791.png
 ---
 
 # A while ago someone posted ...
@@ -11,12 +12,8 @@ So I decided I could try it to get cover images for my articles.
 
 # Getting it to work
 
-First I'm posting this.
-
-Then I'll try to add a `cover_image` setting in the front matter.
-
-For this to work I'll have to upload the banner to DEV.
-
-  > Is there a way to do this via API ?
+Post successfully uploaded.
+Image uploaded to
+I add a `cover_image` setting in the front matter.
 
 Let's see.
