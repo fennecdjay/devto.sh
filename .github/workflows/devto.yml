@@ -12,6 +12,7 @@ jobs:
         bash devto.sh src ${{ secrets.DEVTO_API_KEY }}
     - name: Commit files
       run: |
+        git diff-index --quiet HEAD -- && exit 0
         git config --local user.email "action@github.com"
         git config --local user.name "GitHub Action"
         git add src/*.id
