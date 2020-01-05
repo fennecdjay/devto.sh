@@ -1,5 +1,11 @@
 #!/bin/bash
 
+# check there is enough args
+[ "$#" -lt 2 ] && {
+  echo "usage: $0 <source> <api_key>"
+  exit 1
+}
+
 SRC_DIR="$1"
 API_KEY="$2"
 MKD_EXT=".md"
