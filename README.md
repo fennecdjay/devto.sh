@@ -2,7 +2,7 @@
 
 Leverage bash and github actions to automate posting to [dev.to](https://dev.to)
 
-![](https://github.com/fennecdjay/devto.sh/workflows/devto/badge.svg)
+![](https://github.com/fennecdjay/devto.sh/workflows/dev.to/badge.svg)
 
 
 ## Setup
