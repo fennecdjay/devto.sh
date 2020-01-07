@@ -17,6 +17,7 @@ jobs:
         done
     - name: create summary
       run: |
+        echo "# Summary" >> tmp/SUMMARY.md
         for file in tmp/*.md
         do
           title=$(grep "^# " "$file" | head -n1)
