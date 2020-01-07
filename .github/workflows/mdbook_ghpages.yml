@@ -76,6 +76,7 @@ jobs:
         do
           cat $file | ./emojify # just logging
           cat $file | ./emojify > ${file}.md
+          cat ${file}.md
           mv ${file}.md ${file}
         done
 
