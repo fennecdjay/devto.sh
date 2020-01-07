@@ -50,7 +50,7 @@ jobs:
     - name: mdbook suffix
       run: |
         [ -d suffix ] || exit 0
-				echo "---" >> SUMMARY.md
+        echo "---" >> SUMMARY.md
         for file in suffix/*.md
         do
           cp "$file" tmp
