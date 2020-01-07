@@ -27,7 +27,7 @@ jobs:
         do
           cp "$file" tmp
           title=$(grep "^# " "$file" | head -n1)
-          echo "[${title:2}](${file:6})" >> SUMMARY.md    
+          echo "[${title:2}](${file:7})" >> SUMMARY.md    
         done
 
     - name: create summary
@@ -48,7 +48,7 @@ jobs:
         do
           cp "$file" tmp
           title=$(grep "^# " "$file" | head -n1)
-          echo "[${title:2}](${file:6})" >> SUMMARY.md    
+          echo "[${title:2}](${file:7})" >> SUMMARY.md    
         done
 
     - name: build book
