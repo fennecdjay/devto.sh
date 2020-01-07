@@ -1,4 +1,3 @@
-
 name: MdBook-GhPages
 
 on: [push]
@@ -73,12 +72,7 @@ jobs:
         curl https://raw.githubusercontent.com/mrowa44/emojify/master/emojify -o ./emojify
         chmod +x ./emojify
         for file in tmp/*.md
-        do
-          cat $file | ./emojify # just logging
-          cat $file | ./emojify > ${file}.md
-          cat ${file}.md
-          mv ${file}.md ${file}
-          cat ${file}
+        do cat $file | ./emojify > ${file}
         done
 
     - name: build book
