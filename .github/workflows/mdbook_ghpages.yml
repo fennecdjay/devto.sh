@@ -9,14 +9,6 @@ jobs:
     steps:
     - uses: actions/checkout@master
 
-    - name: Emojify
-      run: |
-        curl https://raw.githubusercontent.com/mrowa44/emojify/master/emojify -o ./emojify
-        chmod +x ./emojify
-        for file in src/*.md
-        do cat $file | ./emojify > $file
-        done
-
     - name: remove front matter
       run : |
         mkdir tmp
@@ -74,6 +66,16 @@ jobs:
         [ -d suffix ] || exit 0
         for file in suffix/*.md
         do cp "$file" tmp
+        done
+
+    - name: Emojify
+      run: |
+        curl https://raw.githubusercontent.com/mrowa44/emojify/master/emojify -o ./emojify
+        chmod +x ./emojify
+        for file in src/*.md
+        do
+          cat $file | ./emojify > ${file}.md
+         mv ${file}.md ${file}
         done
 
     - name: build book
