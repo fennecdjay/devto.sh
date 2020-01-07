@@ -29,12 +29,11 @@ jobs:
       run: |
         echo "# Summary" > SUMMARY.md
 
-    - name: mdbook prefix
+    - name: prefix summary
       run: |
         [ -d prefix ] || exit 0
         for file in prefix/*.md
         do
-          cp "$file" tmp
           title=$(grep "^# " "$file" | head -n1)
           echo "[${title:2}](${file:7})" >> SUMMARY.md    
         done
@@ -53,7 +52,6 @@ jobs:
         echo "---" >> SUMMARY.md
         for file in suffix/*.md
         do
-          cp "$file" tmp
           title=$(grep "^# " "$file" | head -n1)
           echo "[${title:2}](${file:7})" >> SUMMARY.md    
         done
@@ -62,6 +60,20 @@ jobs:
       run: |
         cat SUMMARY.md
         mv SUMMARY.md tmp
+
+    - name: prefix copy
+      run: |
+        [ -d prefix ] || exit 0
+        for file in prefix/*.md
+        do cp "$file" tmp
+        done
+
+    - name: suffix copy
+      run: |
+        [ -d suffix ] || exit 0
+        for file in suffix/*.md
+        do cp "$file" tmp
+        done
 
     - name: build book
       uses: peaceiris/actions-mdbook@v1
