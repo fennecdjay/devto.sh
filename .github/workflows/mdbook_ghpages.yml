@@ -9,12 +9,12 @@ jobs:
     steps:
     - uses: actions/checkout@master
 
-#    - name: Emojify
-#      run: |
-#        curl https://raw.githubusercontent.com/mrowa44/emojify/master/emojify -o emojify
-#        for file in src/*.md
-#        do cat "$file" | bash emojify > "$file"
-#        done
+    - name: Emojify
+      run: |
+        curl https://raw.githubusercontent.com/mrowa44/emojify/master/emojify -o emojify
+        for file in src/*.md
+        do cat $file | bash emojify > $file
+        done
 
     - name: remove front matter
       run : |
