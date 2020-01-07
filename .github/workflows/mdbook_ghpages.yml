@@ -11,7 +11,9 @@ jobs:
       run : |
         mkdir tmp
         for file in src/*.md
-        do sed '1 { /^---/ { :a N; /\n---/! ba; d} }' $file > tmp/${file:3}
+        do
+          sed '1 { /^---/ { :a N; /\n---/! ba; d} }' $file > tmp/${file:3}
+          cat tmp/${file:3}
         done
     - name: create summary
       run: |
