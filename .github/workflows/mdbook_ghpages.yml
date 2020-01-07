@@ -13,7 +13,7 @@ jobs:
         for file in src/*.md
         do sed '1 { /^---/ { :a N; /\n---/! ba; d} }' $file > tmp/${file:3}
         done
-    - name: create SUMMARY.md
+    - name: create summary
       run: |
         for file in tmp/*.md
         do
@@ -21,12 +21,16 @@ jobs:
           echo "- [${title:2}]($file)" >> tmp/SUMMARY.md
         done
         cat tmp/SUMMARY.md
-    - name: Push Book to GH pages
-      run: |
-        git checkout -b doc_tmp
-        git branch -r | grep gh-pages && git push origin :gh-pages || true
-        git add -f book
-        git commit -m "add book"
-        git subtree push --prefix book origin gh-pages
-        git checkout master
-        git branch -D doc_tmp
+
+    - name: build book
+      uses: peaceiris/actions-mdbook@v1
+      with:
+        mdbook-version: 'latest'
+    - run: mdbook build
+
+    - name: Deploy
+      uses: peaceiris/actions-gh-pages@v2
+      env:
+        ACTIONS_DEPLOY_KEY: ${{ secrets.ACTIONS_DEPLOY_KEY }}
+        PUBLISH_BRANCH: gh-pages
+        PUBLISH_DIR: ./book
