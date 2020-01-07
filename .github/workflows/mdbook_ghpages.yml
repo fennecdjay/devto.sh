@@ -17,13 +17,14 @@ jobs:
         done
     - name: create summary
       run: |
-        echo "# Summary" >> tmp/SUMMARY.md
+        echo "# Summary" >> SUMMARY.md
         for file in tmp/*.md
         do
           title=$(grep "^# " "$file" | head -n1)
-          echo "- [${title:2}](${file:4})" >> tmp/SUMMARY.md
+          echo "- [${title:2}](${file:4})" >> SUMMARY.md
         done
-        cat tmp/SUMMARY.md
+        mv SUMMARY.md tmp
+        cat SUMMARY.md
 
     - name: build book
       uses: peaceiris/actions-mdbook@v1
