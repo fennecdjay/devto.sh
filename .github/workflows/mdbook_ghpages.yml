@@ -23,8 +23,8 @@ jobs:
           title=$(grep "^# " "$file" | head -n1)
           echo "- [${title:2}](${file:4})" >> SUMMARY.md
         done
-        mv SUMMARY.md tmp
         cat SUMMARY.md
+        mv SUMMARY.md tmp
 
     - name: build book
       uses: peaceiris/actions-mdbook@v1
