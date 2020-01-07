@@ -7,6 +7,15 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@master
+
+    -name: Emojify
+     run: |
+       curl https://raw.githubusercontent.com/mrowa44/emojify/master/emojify -o emojify
+       chmod +x emojify
+        for file in src/*.md
+        do cat "$file" | emojify > "$file"
+        done
+
     - name: remove front matter
       run : |
         mkdir tmp
@@ -27,7 +36,7 @@ jobs:
         do
           cp "$file" tmp
           title=$(grep "^# " "$file" | head -n1)
-          echo "[${title:2}](${file:7})" >> SUMMARY.md    
+          echo "[${title:2}](${file:7})" >> tmp/SUMMARY.md    
         done
 
     - name: create summary
@@ -36,10 +45,9 @@ jobs:
         for file in tmp/*.md
         do
           title=$(grep "^# " "$file" | head -n1)
-          echo "- [${title:2}](${file:4})" >> SUMMARY.md
+          echo "- [${title:2}](${file:4})" >> tmp/SUMMARY.md
         done
-        cat SUMMARY.md
-        mv SUMMARY.md tmp
+        cat tmp/SUMMARY.md
 
     - name: mdbook suffix
       run: |
@@ -48,7 +56,7 @@ jobs:
         do
           cp "$file" tmp
           title=$(grep "^# " "$file" | head -n1)
-          echo "[${title:2}](${file:7})" >> SUMMARY.md    
+          echo "[${title:2}](${file:7})" >> tmp/SUMMARY.md    
         done
 
     - name: build book
