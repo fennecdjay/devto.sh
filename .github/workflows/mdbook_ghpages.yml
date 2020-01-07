@@ -15,6 +15,21 @@ jobs:
           sed '1 { /^---/ { :a N; /\n---/! ba; d} }' $file > tmp/${file:3}
           cat tmp/${file:3}
         done
+
+    - name: initiate summary
+      run: |
+        echo "# Summary" >> SUMMARY.md
+
+    - name: mdbook prefix
+      run: |
+        [ -d prefix ] || exit 0
+        for file in prefix/*.md
+        do
+          cp "$file" tmp
+          title=$(grep "^# " "$file" | head -n1)
+          echo "[${title:2}](${file:4})" >> SUMMARY.md    
+        done
+
     - name: create summary
       run: |
         echo "# Summary" >> SUMMARY.md
@@ -25,6 +40,16 @@ jobs:
         done
         cat SUMMARY.md
         mv SUMMARY.md tmp
+
+    - name: mdbook suffix
+      run: |
+        [ -d suffix ] || exit 0
+        for file in suffix/*.md
+        do
+          cp "$file" tmp
+          title=$(grep "^# " "$file" | head -n1)
+          echo "[${title:2}](${file:4})" >> SUMMARY.md    
+        done
 
     - name: build book
       uses: peaceiris/actions-mdbook@v1
