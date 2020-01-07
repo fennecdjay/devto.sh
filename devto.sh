@@ -27,13 +27,18 @@ send() {
      "https://dev.to/api/articles/$3" 2>/dev/null
 }
 
+set_id() {
+  echo "<!-- DEVTO_POSTID $2 -->" >> "$1"
+  git add "$1"
+}
+
 create() {
   id=$(send "POST" "$1" | jq -r ".id")
-  check "creating" "$1" "$id" && echo "$id" > "$2"
+  check "creating" "$1" "$id" && set_id "$1" "$id"
 }
 
 update() {
-  id=$(send "PUT" "$1" "$(cat "$2")" | jq -r ".id")
+  id=$(send "PUT" "$1" "$2" | jq -r ".id")
   check "updating" "$1" "$id"
 }
 
@@ -42,11 +47,17 @@ file2json() {
   jq -n --arg v "$var" '{"article":{"body_markdown":$v}}'
 }
 
+get_id() {
+  line=$(grep '<!-- DEVTO_POSTID' "$1")
+  cut -d" " -f3 <<< "$line"
+}
+
 for post in "$SRC_DIR/"*"$MKD_EXT"
 do
-  id="${post:0:-2}id"
-  if [ -f "$id" ]
-  then update "$post" "$id"
-  else create "$post" "$id"
+  [ -z "$(git status --porcelain "$post")" ] && continue
+  id="$(get_id "$post")"
+  if [ -z "$id" ]
+  then create "$post" "$id"
+  else update "$post" "$id"
   fi
 done
