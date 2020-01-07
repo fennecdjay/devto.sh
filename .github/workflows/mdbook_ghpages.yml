@@ -67,15 +67,15 @@ jobs:
         do cp "$file" tmp
         done
 
-#    - name: Emojify
-#      run: |
-#        curl https://raw.githubusercontent.com/mrowa44/emojify/master/emojify -o ./emojify
-#        chmod +x ./emojify
-#        for file in tmp/*.md
-#        do
-#          cat $file | ./emojify > ${file}.tmp
-#          mv ${file}.tmp $file
-#        done
+    - name: Emojify
+      run: |
+        curl https://raw.githubusercontent.com/mrowa44/emojify/master/emojify -o ./emojify
+        chmod +x ./emojify
+        for file in tmp/*.md
+        do
+          cat $file | ./emojify > $file.tmp
+          mv $file.tmp $file
+        done
 
     - name: build book
       uses: peaceiris/actions-mdbook@v1
