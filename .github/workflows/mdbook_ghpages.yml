@@ -72,7 +72,7 @@ jobs:
       run: |
         curl https://raw.githubusercontent.com/mrowa44/emojify/master/emojify -o ./emojify
         chmod +x ./emojify
-        for file in src/*.md
+        for file in tmp/*.md
         do
           cat $file | ./emojify # just logging
           cat $file | ./emojify > ${file}.md
