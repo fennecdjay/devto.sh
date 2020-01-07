@@ -19,7 +19,7 @@ jobs:
       run: |
         for file in tmp/*.md
         do
-          title=$(head -n1 $file)
+          title=$(grep "^# " "$file" | head -n1)
           echo "- [${title:2}](${file:4})" >> tmp/SUMMARY.md
         done
         cat tmp/SUMMARY.md
