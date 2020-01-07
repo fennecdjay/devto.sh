@@ -75,6 +75,7 @@ jobs:
         do
           cat $file | ./emojify > $file.tmp
           mv $file.tmp $file
+          rm $file.tmp
         done
 
     - name: build book
