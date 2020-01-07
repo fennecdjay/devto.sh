@@ -1,0 +1,29 @@
+name: MdBook-GhPages
+on: [push]
+
+jobs:
+  runs-on: ubuntu-latest
+  steps:
+  - uses: actions/checkout@master
+  - name: remove front matter
+    run : |
+      mkdir tmp
+      for file in src/*.md
+      do sed '1 { /^---/ { :a N; /\n---/! ba; d} }' $file > tmp/${file:3}
+      done
+  - name: create SUMMARY.md
+      for file in tmp/*.md
+      do
+        title=$(head -n1 $file)
+        echo "- [${title:2}]($file) >> tmp/SUMMARY.md
+      done
+      cat tmp/SUMMARY.md
+  - name: Push Book to GH pages
+    run: |
+      git checkout -b doc_tmp
+      git branch -r | grep gh-pages && git push origin :gh-pages || true
+      git add -f book
+      git commit -m "add book"
+      git subtree push --prefix book origin gh-pages
+      git checkout master
+      git branch -D doc_tmp

@@ -1,0 +1,6 @@
+[book]
+authors = ["Jérémie Astor"]
+language = "en"
+multilingual = false
+src = "tmp"
+title = "Devto Crosspost Experiment"
