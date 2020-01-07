@@ -78,6 +78,7 @@ jobs:
           cat $file | ./emojify > ${file}.md
           cat ${file}.md
           mv ${file}.md ${file}
+          cat ${file}
         done
 
     - name: build book
