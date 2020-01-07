@@ -1,3 +1,4 @@
+
 name: MdBook-GhPages
 
 on: [push]
@@ -26,7 +27,7 @@ jobs:
 
     - name: initiate summary
       run: |
-        echo "# Summary" >> SUMMARY.md
+        echo "# Summary" > SUMMARY.md
 
     - name: mdbook prefix
       run: |
@@ -49,6 +50,7 @@ jobs:
     - name: mdbook suffix
       run: |
         [ -d suffix ] || exit 0
+				echo "---" >> SUMMARY.md
         for file in suffix/*.md
         do
           cp "$file" tmp
@@ -57,7 +59,9 @@ jobs:
         done
 
     - name: move summary
-      run: mv SUMMARY.md tmp
+      run: |
+        cat SUMMARY.md
+        mv SUMMARY.md tmp
 
     - name: build book
       uses: peaceiris/actions-mdbook@v1
