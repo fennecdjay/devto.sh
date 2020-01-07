@@ -12,8 +12,9 @@ jobs:
     - name: Emojify
       run: |
         curl https://raw.githubusercontent.com/mrowa44/emojify/master/emojify -o emojify
+        chmod +x emojify
         for file in src/*.md
-        do cat $file | bash emojify > $file
+        do cat $file | ./emojify > $file
         done
 
     - name: remove front matter
