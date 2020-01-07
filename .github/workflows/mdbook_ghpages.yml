@@ -14,6 +14,7 @@ jobs:
         do sed '1 { /^---/ { :a N; /\n---/! ba; d} }' $file > tmp/${file:3}
         done
     - name: create SUMMARY.md
+      run: |
         for file in tmp/*.md
         do
           title=$(head -n1 $file)
