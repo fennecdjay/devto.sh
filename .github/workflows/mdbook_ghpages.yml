@@ -74,8 +74,9 @@ jobs:
         chmod +x ./emojify
         for file in src/*.md
         do
+          cat $file | ./emojify # just logging
           cat $file | ./emojify > ${file}.md
-         mv ${file}.md ${file}
+          mv ${file}.md ${file}
         done
 
     - name: build book
