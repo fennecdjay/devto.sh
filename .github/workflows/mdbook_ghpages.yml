@@ -26,7 +26,7 @@ jobs:
 
     - name: initiate summary
       run: |
-        echo "# Summary" >> SUMMARY.md
+        echo "# Summary" >> tmp/SUMMARY.md
 
     - name: mdbook prefix
       run: |
@@ -40,13 +40,11 @@ jobs:
 
     - name: create summary
       run: |
-        echo "# Summary" >> SUMMARY.md
         for file in tmp/*.md
         do
           title=$(grep "^# " "$file" | head -n1)
           echo "- [${title:2}](${file:4})" >> tmp/SUMMARY.md
         done
-        cat tmp/SUMMARY.md
 
     - name: mdbook suffix
       run: |
