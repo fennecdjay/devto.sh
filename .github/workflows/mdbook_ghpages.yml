@@ -18,7 +18,7 @@ jobs:
         for file in tmp/*.md
         do
           title=$(head -n1 $file)
-          echo "- [${title:2}]($file) >> tmp/SUMMARY.md
+          echo "- [${title:2}]($file)" >> tmp/SUMMARY.md
         done
         cat tmp/SUMMARY.md
     - name: Push Book to GH pages
