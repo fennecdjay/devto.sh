@@ -8,14 +8,14 @@ jobs:
     steps:
     - uses: actions/checkout@master
 
-    - name: remove front matter
-      run : |
-        mkdir tmp
-        for file in src/*.md
-        do
-          sed '1 { /^---/ { :a N; /\n---/! ba; d} }' $file > tmp/${file:3}
-          cat tmp/${file:3}
-        done
+#    - name: remove front matter
+#      run : |
+#        mkdir tmp
+#        for file in src/*.md
+#        do
+#          sed '1 { /^---/ { :a N; /\n---/! ba; d} }' $file > tmp/${file:3}
+#          cat tmp/${file:3}
+#        done
 
     - name: initiate summary
       run: |
@@ -66,6 +66,11 @@ jobs:
         for file in suffix/*.md
         do cp "$file" tmp
         done
+
+    - name: remove front matter
+      uses: fennecdjay/remove-front-matter-docker-action@v1
+      with:
+        directory: 'tmp'
 
     - name: Emojify
       uses: fennecdjay/emojify-docker-action@v1
