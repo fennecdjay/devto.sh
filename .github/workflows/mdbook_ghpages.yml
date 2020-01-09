@@ -53,6 +53,10 @@ jobs:
         cat SUMMARY.md
         mv SUMMARY.md tmp
 
+    - name: create output directory
+      run : |
+        mkdir tmp
+       
     - name: prefix copy
       run: |
         [ -d prefix ] || exit 0
