@@ -48,15 +48,15 @@ jobs:
           echo "[${title:2}](${file:7})" >> SUMMARY.md    
         done
 
+    - name: create output directory
+      run : |
+        mkdir tmp
+       
     - name: move summary
       run: |
         cat SUMMARY.md
         mv SUMMARY.md tmp
 
-    - name: create output directory
-      run : |
-        mkdir tmp
-       
     - name: prefix copy
       run: |
         [ -d prefix ] || exit 0
