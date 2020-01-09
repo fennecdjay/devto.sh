@@ -71,15 +71,6 @@ jobs:
       uses: fennecdjay/emojify-docker-action@v1
       with:
         directory: 'tmp'
-#      run: |
-#        curl https://raw.githubusercontent.com/mrowa44/emojify/master/emojify -o ./emojify
-#        chmod +x ./emojify
-#        for file in tmp/*.md
-#        do
-#          cat $file | ./emojify > $file.tmp
-#          mv $file.tmp $file
-#          rm $file.tmp
-#        done
 
     - name: build book
       uses: peaceiris/actions-mdbook@v1
