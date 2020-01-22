@@ -8,15 +8,6 @@ jobs:
     steps:
     - uses: actions/checkout@master
 
-#    - name: remove front matter
-#      run : |
-#        mkdir tmp
-#        for file in src/*.md
-#        do
-#          sed '1 { /^---/ { :a N; /\n---/! ba; d} }' $file > tmp/${file:3}
-#          cat tmp/${file:3}
-#        done
-
     - name: initiate summary
       run: |
         echo "# Summary" > SUMMARY.md
@@ -32,7 +23,8 @@ jobs:
 
     - name: create summary
       run: |
-        for file in tmp/*.md
+        [ -d src ] || exit 0
+        for file in src/*.md
         do
           title=$(grep "^# " "$file" | head -n1)
           echo "- [${title:2}](${file:4})" >> SUMMARY.md
@@ -60,6 +52,13 @@ jobs:
     - name: prefix copy
       run: |
         [ -d prefix ] || exit 0
+        for file in prefix/*.md
+        do cp "$file" tmp
+        done
+
+    - name: body copy
+      run: |
+        [ -d src ] || exit 0
         for file in prefix/*.md
         do cp "$file" tmp
         done
