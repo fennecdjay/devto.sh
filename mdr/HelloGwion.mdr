@@ -1,0 +1,189 @@
+# Hello, Gwion!
+
+I've been posting about [Gwion](https://github.com/fennecdjay/Gwion)
+here for a while, but never explaining quite clearly what the project could do.
+I'm hoping this post while help people have an idea of that.
+
+### Dependencies
+
+Please make sure all these are installed on your computer:
+
+  * A C compiler.
+    Gwion is tested with [gcc](https://gcc.gnu.org/) and [clang](https://clang.llvm.org)
+  * [make](https://www.gnu.org/software/make/)
+  * a terminal emulator. (I use [kitty](https://sw.kovidgoyal.net/kitty/))
+  * [libwebsockets](https://libwebsockets.org/)
+  * Soundpipe. The original repo has been removed, but you can still find copy on github.
+    You can try [this one](https://github.com/shybyte/soundpipe)
+
+Now you're all set, let me suggest you first follow instructions in
+[this short post]()
+and get back reading here, it'll save you most of the burden (as in just read :smile:)
+
+## Gwion
+
+First we need to get gwion, we'll follow the basic procedure,
+but we will also need some plugins, so we add `plug` to the `submodule update` command
+
+@``` install_gwion.sh
+git clone https://github.com/fennecdjay/Gwion
+cd Gwion
+git submodule update --init util ast plug
+make
+@```
+
+@hide bash install_gwion.sh
+
+### Building the plugins
+
+For this project we need a few plugins.  
+Let's build them too.
+
+@``` plugins.sh
+cd Gwion/plug/Soundpipe
+make
+cd ../Modules
+make
+cd ../WebSocket
+make
+@```
+
+@hide bash plugins.sh
+
+## The browser part
+
+Now, since the goal is to hear Gwion's audio output from the browser,
+we'll need some javascript and html
+
+@``` gwion_ws_test.js
+const URL = "ws://localhost:1111"
+const BUFLEN = 512;
+const NCHAN = 2;
+var ws;
+var scriptNode;
+var audioCtx;
+var outsamples = new Float32Array(BUFLEN);
+var volume = 0.5;
+
+function gwionWsSetVolume(value) {
+  volume = value;
+}
+
+function gwionWsFillBuffer(audioProcessingEvent) {
+  ws.send("next");
+  var outputBuffer = audioProcessingEvent.outputBuffer;
+  for (var channel = 0; channel < NCHAN; channel++) {
+    var outputData = outputBuffer.getChannelData(channel);
+    for (var sample = 0; sample < BUFLEN; sample++)
+      outputData[sample] = outsamples[sample + channel*BUFLEN] * volume;
+  }
+}
+
+function gwionWsOnOpen()  {
+  audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+  console.log(audioCtx.sampleRate);
+  scriptNode = audioCtx.createScriptProcessor(BUFLEN, NCHAN, NCHAN);
+  scriptNode.onaudioprocess = gwionWsFillBuffer;
+  scriptNode.connect(audioCtx.destination);
+}
+
+function gwionWsOnMessage(e)  {
+//  if(e.data instanceof ArrayBuffer)
+  outsamples = new Float32Array(e.data);
+}
+
+function gwionWsOnClose()  {
+  if(audioCtx) {
+    scriptNode.disconnect();
+    audioCtx.close();
+    alert("Connection closed");
+  }
+}
+
+function gwionWsInit() {
+  ws = new WebSocket(URL);
+  if(!ws)
+    alert("Web socket server not found at url: " + URL);
+  ws.onopen = gwionWsOnOpen;
+  ws.onmessage = gwionWsOnMessage;
+  ws.onclose = gwionWsOnClose;
+  ws.binaryType = "arraybuffer";
+}
+
+function gwionWsOnLoad() {
+  if ("WebSocket" in window)
+    gwionWsInit();
+  else
+    alert("WebSocket NOT supported by your Browser!");
+}
+@```
+
+@``` gwion_ws_test.html
+<!DOCTYPE HTML>
+<html>
+  <script src="gwion_ws_test.js"></script>
+  <body>
+  <p><button onclick="gwionWsOnLoad();">Connect</button><p>
+  <p><input id="volumeSlider" type="range" min="0" max="1" value="0.5" step="0.01" oninput>
+  </body>
+</html>
+@```
+
+### Contributing
+
+You quite probably have a better knowledge of javascript than me.
+Feel free to share your improvements and submit a PR.
+Using Web assembly and switching from ScriptProcessor to AudioWorklet
+would be great additions!
+
+## Some life-easing script
+
+Now we got all the pieces.  
+We just need to assemble all this.
+@``` ease.sh
+# create a 'libs' directory to store our plugins
+mkdir libs
+# copy all the plugins we built into 'libs'
+cp Gwion/plug/*/*.so libs
+# '-s 44100' as most browsers will output sound at that samplerate
+# '-p libs' tell gwion where to look for plugins
+# '-d ws' use 'ws' (aka WebSocket) driver
+# '$@' pass all arguments to gwion
+echo './Gwion/gwion -s 44100 -p libs -d ws $@' > run.sh
+@```
+
+@hide bash ease.sh
+
+## A sound synthesis Hello World
+
+The sound synthesis equivalent of *hello world* seems to be 5 seconds of a sine generator, at 440 hertz.  
+Let's just do that.
+
+@``` hello_sine.gw
+#! Create a Sine generator and connect it to audio output
+var SinOsc s => dac;
+#! let five seconds pass
+5::second => now;
+@```
+
+@``` test.sh
+# do nothing without a BROWSER variable
+if [ -z "$BROWSER" ]
+then
+  echo "please set BROWSER environment variable"
+  exit 1
+done
+$BROWSER gwion_ws_test.html &!
+bash run.sh hello_sine.gw
+@```
+
+@hide bash test.sh
+
+You might now see the test page in your browser.
+Click the `Connect` button and you might here something! :champagne:
+
+## More to come
+
+Hopefully this post will get some support, and it'll motivate me to continue.
+I think the second episode will demonstrate a simple but interresting psycho-acoustic experience,
+and the third should show how to build a simple melody. Since Gwion can obviously do so much more, there might be a ton of follow-up articles :smile:
