@@ -172,7 +172,7 @@ if [ -z "$BROWSER" ]
 then
   echo "please set BROWSER environment variable"
   exit 1
-done
+fi
 $BROWSER gwion_ws_test.html &!
 bash run.sh hello_sine.gw
 @```
